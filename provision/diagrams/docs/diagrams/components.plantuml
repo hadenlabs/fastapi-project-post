@@ -1,0 +1,6 @@
+@startuml
+skinparam roundCorner 15
+
+node "User" as user
+
+@enduml

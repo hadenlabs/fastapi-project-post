@@ -1,0 +1,27 @@
+@startuml
+skinparam roundCorner 15
+
+node "Cyber Security" as eth
+node "Development" as code
+
+node "Cloud" as cloud
+
+node "Operations" as ops
+node "Scrum" as scrum
+node "DevOps" as devops
+node "DevSecOps" as devsecops
+node "Agile" as agile
+
+
+agile --> scrum
+scrum --> cloud
+
+
+ops --> devops
+code --> devops
+cloud --> devops
+
+cloud --> devsecops
+devops --> devsecops
+eth --> devsecops
+@enduml

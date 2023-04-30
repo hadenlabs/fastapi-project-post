@@ -1,0 +1,64 @@
+# -*- coding: utf-8 -*-
+from typing import List, Optional
+
+from fastapi import APIRouter, Body, Depends, Path, Query, status
+from sqlalchemy.orm import Session
+
+from app.core import deps
+from app.v1.schema import {{lowerCase modelName}}_schema
+from app.v1.service import {{lowerCase modelName}}_service
+
+router = APIRouter(prefix="/api/v1/{{dashCase modelName}}")
+
+
+@router.post(
+    "/",
+    tags=["{{dashCase modelName}}"],
+    status_code=status.HTTP_201_CREATED,
+    response_model={{lowerCase modelName}}_schema.{{properCase modelName}},
+)
+def create(
+    {{lowerCase modelName}}: {{lowerCase modelName}}_schema.Create = Body(...),
+    db: Session = Depends(deps.get_db),
+):
+    return {{lowerCase modelName}}_service.create(db=db, {{lowerCase modelName}}={{lowerCase modelName}})
+
+
+@router.get(
+    "/",
+    tags=["{{dashCase modelName}}"],
+    status_code=status.HTTP_200_OK,
+    response_model=List[{{lowerCase modelName}}_schema.{{properCase modelName}}],
+)
+def get_all(
+    db: Session = Depends(deps.get_db),
+):
+    return {{lowerCase modelName}}_service.get_all(db=db)
+
+
+@router.get(
+    "/{id}",
+    tags=["{{dashCase modelName}}"],
+    status_code=status.HTTP_200_OK,
+    response_model={{lowerCase modelName}}_schema.{{properCase modelName}},
+)
+def get(
+    {{lowerCase modelName}}_id: int = Path(..., gt=0),
+    db: Session = Depends(deps.get_db),
+):
+    return {{lowerCase modelName}}_service.get(db=db, {{lowerCase modelName}}_id=id)
+
+
+@router.delete(
+    "/{id}/",
+    tags=["{{dashCase modelName}}"],
+    status_code=status.HTTP_200_OK,
+)
+def delete(
+    id: int = Path(..., gt=0),
+    db: Session = Depends(deps.get_db),
+):
+
+    {{lowerCase modelName}}_service.delete(db=db, {{lowerCase modelName}}_id=id)
+
+    return {"msg": "{{lowerCase modelName}} has been deleted successfully"}

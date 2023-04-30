@@ -1,0 +1,72 @@
+# -*- coding: utf-8 -*-
+from fastapi import HTTPException, status
+from sqlalchemy.orm import Session
+
+from app.v1.model.{{lowerCase modelName}}_model import {{properCase modelName}}Model
+from app.v1.schema import {{lowerCase modelName}}_schema
+
+
+def create_{{lowerCase modelName}}(
+    db: Session,
+    {{lowerCase modelName}}: {{lowerCase modelName}}_schema.{{properCase modelName}}Create,
+):
+    db_{{lowerCase modelName}} = {{properCase modelName}}Model()
+    db.add(db_{{lowerCase modelName}})
+    db.commit()
+    db.refresh(db_{{lowerCase modelName}})
+
+    return {{lowerCase modelName}}_schema.{{properCase modelName}}(
+    )
+
+
+def get_{{lowerCase modelName}}s(
+    db: Session,
+):
+    items = db.query({{properCase modelName}}Model)
+
+    list_{{lowerCase modelName}}s = []
+    for item in items:
+        list_{{lowerCase modelName}}s.append(
+            {{lowerCase modelName}}_schema.{{properCase modelName}}()
+        )
+
+    return list_{{lowerCase modelName}}s
+
+
+def get_{{lowerCase modelName}}(
+    {{lowerCase modelName}}_id: int,
+    db: Session,
+):
+    {{lowerCase modelName}} = (
+        db.query({{properCase modelName}}Model)
+        .filter(({{properCase modelName}}Model.id == {{lowerCase modelName}}_id))
+        .first()
+    )
+
+    if not {{lowerCase modelName}}:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="{{properCase modelName}} not found"
+        )
+
+    return {{lowerCase modelName}}_schema.{{properCase modelName}}()
+
+
+def delete_{{lowerCase modelName}}(
+    {{lowerCase modelName}}_id: int,
+    db: Session,
+):
+    {{lowerCase modelName}} = (
+        db.query({{properCase modelName}}Model)
+        .filter(({{properCase modelName}}Model.id == {{lowerCase modelName}}_id))
+        .first()
+    )
+
+    if not {{lowerCase modelName}}:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="{{properCase modelName}} not found"
+        )
+
+    db.delete({{lowerCase modelName}})
+    db.commit()
+
+    return {{lowerCase modelName}}

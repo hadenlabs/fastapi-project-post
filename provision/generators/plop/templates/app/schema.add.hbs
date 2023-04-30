@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+from datetime import datetime
+from typing import Optional
+
+from pydantic import BaseModel, Field
+
+
+class {{properCase modelName}}Base(BaseModel):
+    pass
+
+
+class {{properCase modelName}}Create({{properCase modelName}}Base):
+    pass
+
+
+class {{properCase modelName}}({{properCase modelName}}Create):
+    id: int = Field(...)
+    created_at: datetime = Field(default=datetime.now())
+
+    class Config:
+        orm_mode = True
