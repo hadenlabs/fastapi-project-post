@@ -1,0 +1,18 @@
+{
+  "baseUrl": "https://github.com/hadenlabs/fastapi-project-post",
+  "ignorePatterns": [
+    {
+      "pattern": "^https://github.com/hadenlabs"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/docs",
+      "replacement": "{{BASEURL}}/docs"
+    }
+  ],
+  "timeout": "20s",
+  "retryCount": 3,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 206]
+}

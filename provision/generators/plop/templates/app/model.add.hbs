@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
+from .base_model import CommonModel
+
+
+class {{properCase modelName}}Model(CommonModel):
+    __tablename__ = "{{lowerCase nameTable}}"
+
+    def __repr__(self):
+        return f"<{{titleCase modelName}} title={self.title}>"

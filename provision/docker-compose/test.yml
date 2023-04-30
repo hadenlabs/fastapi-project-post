@@ -1,0 +1,28 @@
+# Docker Compose
+# https://docs.docker.com/compose/
+#
+# Usage: test up
+
+services:
+  app:
+    image: sample-python-fastapi-test
+    stdin_open: true
+    tty: true
+    depends_on:
+      - database-test
+    environment: &environment
+      - ENVIRONMENT=testing
+      - DB_HOST=database-test
+
+  # PostgreSQL database.
+  database-test:
+    image: postgres:13.6
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: test_${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - database-test:/var/lib/postgresql/data
+
+volumes:
+  database-test:

@@ -1,0 +1,94 @@
+version: "3"
+
+tasks:
+  default:
+    desc: Show list task
+    run: once
+    cmds:
+      - task -l
+
+  check:
+    desc: Exist docker compose and dependences
+    run: once
+    deps:
+      - task: check:docker
+
+  check:docker:
+    desc: Exist docker
+    run: once
+    preconditions:
+      - sh: command -v docker
+        msg: "Please Install docker"
+
+  cmd:
+    desc: command docker compose.
+    run: once
+    deps:
+      - task: check:docker
+    cmds:
+      - cmd: poetry run docker-compose -f docker-compose.yml {{.PARAMS}} {{.DOCKER_SERVICE_API}} {{.CLI_ARGS}}
+
+  run:
+    desc: Run Image.
+    run: once
+    cmds:
+      - task: cmd
+        vars: { PARAMS: run --rm --service-ports }
+
+  restart:
+    desc: restart docker compose.
+    run: once
+    cmds:
+      - task: cmd
+        vars: { PARAMS: restart }
+
+  down:
+    desc: down docker compose stage dev.
+    run: once
+    cmds:
+      - task: cmd
+        vars: { PARAMS: down }
+
+  build:
+    desc: build docker compose.
+    run: once
+    cmds:
+      - task: cmd
+        vars: { PARAMS: build }
+
+  exec:
+    desc: exec docker compose stage dev.
+    run: once
+    cmds:
+      - task: cmd
+        vars: { PARAMS: exec }
+
+  stop:
+    desc: stop docker compose stage dev.
+    run: once
+    cmds:
+      - task: cmd
+        vars: { PARAMS: stop }
+
+  up:
+    desc: up docker compose stage dev.
+    run: once
+    cmds:
+      - task: cmd
+        vars: { PARAMS: up }
+
+  list:
+    desc: list docker compose stage dev.
+    run: once
+    cmds:
+      - task: cmd
+        vars: { PARAMS: ps }
+
+  test:all:
+    desc: list docker compose stage test.
+    run: once
+    deps:
+      - task: check:docker
+    cmds:
+      - >-
+        poetry run docker-compose -f {{.PATH_DOCKER_COMPOSE}}/test.yml run --rm --entrypoint "pytest --no-header -v -s" {{.DOCKER_SERVICE_API}}

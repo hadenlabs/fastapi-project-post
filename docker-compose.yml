@@ -1,0 +1,39 @@
+# Docker Compose
+# https://docs.docker.com/compose/
+# Usage: docker-compose up
+---
+version: "3.8"
+
+services:
+  app:
+    ports:
+      - "3000:3000"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    environment: &environment
+      - APPLICATION_HOST=0.0.0.0
+      - APPLICATION_PORT=3000
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=database
+      - DB_PORT=${DB_PORT}
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+
+  # PostgreSQL database.
+  database:
+    image: postgres:13.6
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - database:/var/lib/postgresql/data
+
+volumes:
+  database:

@@ -1,0 +1,97 @@
+[tool.poetry]
+name = "fastapi-project-post"
+version = "0.0.0"
+description = "fastapi-project-post"
+authors = ["Luis Mayta <luis@hadenlabs.com>"]
+license = "LGPL-3.0"
+readme = "README.md"
+repository = "https://github.com/hadeblabs/fastapi-project-post"
+
+[tool.poetry.dependencies]
+python = "^3.8,<3.12"
+boto3 = "*"
+PyYAML = "5.4.1"
+SQLAlchemy-Utils = ">=0.36.8"
+SQLAlchemy = "1.4.19"
+databases = ">=0.4.1"
+fastapi = ">=0.85.0"
+psycopg2-binary = "^2.9.1"
+pydantic = ">=1.8.2"
+python-dotenv = "^1.0.0"
+typing-extensions = ">=3.10.0.2"
+uvicorn = ">=0.15.0"
+email-validator = "1.1.3"
+
+[tool.poetry.group.docs.dependencies]
+pymdown-extensions = "*"
+doc8 = "*"
+grip = "*"
+mkdocs = "*"
+mkdocs-material = "*"
+
+[tool.poetry.group.test.dependencies]
+faker = "*"
+mock = "*"
+pytest-mock = "*"
+pytest = "^7.3.0"
+pytest-cov = "^4.0.0"
+pytest-dotenv = "^0.5.2"
+duckdb-engine = "^0.7.0"
+pytest-watcher = "^0.2.6"
+freezegun = "^1.2.2"
+responses = "^0.22.0"
+pytest-asyncio = "^0.20.3"
+PyHamcrest = "*"
+factory-boy = "*"
+
+[tool.poetry.group.test_integration]
+optional = true
+
+[tool.poetry.group.test_integration.dependencies]
+torch = "^1.0.0"
+chromadb = "^0.3.21"
+
+[tool.poetry.group.lint.dependencies]
+pre-commit = "*"
+ruff = "^0.0.249"
+types-toml = "^0.10.8.1"
+black = "^23.1.0"
+
+[tool.poetry.group.typing.dependencies]
+mypy = "^0.991"
+types-pyyaml = "^6.0.12.2"
+types-requests = "^2.28.11.5"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+bumpversion = "*"
+ipdb = "*"
+python-language-server = { extras = ["all"], version = "*" }
+
+[tool.poetry.extras]
+docs = ["mkdocs", "mkdocs-material"]
+
+[tool.mypy]
+ignore_missing_imports = "True"
+disallow_untyped_defs = "True"
+exclude = ["notebooks"]
+
+[tool.ruff]
+select = [
+  "E", # pycodestyle
+  "F", # pyflakes
+  "I", # isort
+]
+
+[tool.coverage.run]
+omit = ["tests/*"]
+
+[tool.poetry_bumpversion.file."sonar-project.properties"]
+search = 'sonar.projectVersion={current_version}'
+replace = 'sonar.projectVersion={new_version}'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
