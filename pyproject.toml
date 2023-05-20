@@ -9,7 +9,7 @@ repository = "https://github.com/hadeblabs/fastapi-project-post"
 
 [tool.poetry.dependencies]
 python = "^3.8,<3.12"
-boto3 = "*"
+boto3 = "^1.26.130"
 PyYAML = "5.4.1"
 SQLAlchemy-Utils = ">=0.36.8"
 SQLAlchemy = "1.4.19"
