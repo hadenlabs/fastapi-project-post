@@ -23,7 +23,9 @@ fastapi project
 This is a list of requirements that need to be installed previously to enjoy all the goodies of this configuration:
 
 - [gomplate](https://github.com/hairyhenderson/gomplate)
+- [docker](https://www.docker.com)
 - [python](https://www.python.org)
+- [Go](https://go.dev)
 - [taskfile](https://github.com/go-task/task)
 
 ## Usage
