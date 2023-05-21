@@ -32,6 +32,4 @@ def create_user(
     db.add(db_user)
     db.commit()
 
-    return user_schema.User(
-        id=db_user.id, username=db_user.username, email=db_user.email
-    )
+    return user_schema.User(id=db_user.id, username=db_user.username, email=db_user.email)
