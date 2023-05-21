@@ -19,9 +19,11 @@ psycopg2-binary = "^2.9.1"
 pydantic = ">=1.8.2"
 python-dotenv = "^1.0.0"
 typing-extensions = ">=3.10.0.2"
-uvicorn = ">=0.15.0"
+uvicorn = { extras = ["standard"], version = "^0.22.0" }
 email-validator = "1.1.3"
 httpx = "^0.24.1"
+python-decouple = "^3.8"
+gunicorn = "^20.1.0"
 
 [tool.poetry.group.docs.dependencies]
 pymdown-extensions = "*"
@@ -37,7 +39,6 @@ pytest-mock = "*"
 pytest = "^7.3.0"
 pytest-cov = "^4.0.0"
 pytest-dotenv = "^0.5.2"
-duckdb-engine = "^0.7.0"
 pytest-watcher = "^0.2.6"
 freezegun = "^1.2.2"
 responses = "^0.22.0"
@@ -79,12 +80,45 @@ ignore_missing_imports = "True"
 disallow_untyped_defs = "True"
 exclude = ["notebooks"]
 
+[tool.black]
+line-length = 90
+
+[tool.pyright]
+useLibraryCodeForTypes = false
+typeCheckingMode = 'strict'
+stubPath = './typings'
+exclude = ['**/__init__.py', './typings']
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+strictParameterNoneValue = true
+reportUntypedFunctionDecorator = "error"
+reportUntypedClassDecorator = "error"
+reportUntypedBaseClass = "error"
+reportUnusedClass = "error"
+reportUnnecessaryCast = "error"
+reportUnnecessaryComparison = "error"
+reportUnnecessaryContains = "error"
+reportUnnecessaryIsInstance = "error"
+reportImportCycles = "error"
+reportDuplicateImport = "error"
+
 [tool.ruff]
 select = [
   "E", # pycodestyle
   "F", # pyflakes
   "I", # isort
 ]
+[tool.isort]
+line_length = 90
+atomic = true
+profile = "black"
+skip_gitignore = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+tests = []
+skips = []
 
 [tool.coverage.run]
 omit = ["tests/*"]
