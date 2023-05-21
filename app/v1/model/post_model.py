@@ -7,7 +7,6 @@ from .base_model import CommonModel
 
 
 class PostModel(CommonModel):
-    pass
     __tablename__ = "posts"
 
     title = Column(String(30), nullable=False)
