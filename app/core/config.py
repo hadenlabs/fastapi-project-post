@@ -16,7 +16,7 @@ class Environment(BaseSettings):
     db_host: str = config("DB_HOST", default="127.0.0.1")
     db_port: int = config("DB_PORT", default=5432, cast=int)
     app_host: str = config("APPLICATION_HOST", default="0.0.0.0")
-    app_port: int = config("APPLICATION_PORT", default=3000, cast=int)
+    app_port: int = config("APPLICATION_PORT", default=8000, cast=int)
     secret_key: str = config("SECRET_KEY", default="ed296226ec6de1cfe550fb2a979b6b71a80")
     token_expire: int = config("ACCESS_TOKEN_EXPIRE_MINUTES", default=1440, cast=int)
 

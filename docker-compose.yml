@@ -7,7 +7,7 @@ version: "3.8"
 services:
   app:
     ports:
-      - "3000:3000"
+      - "8000:8000"
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
       - database
     environment: &environment
       - APPLICATION_HOST=0.0.0.0
-      - APPLICATION_PORT=3000
+      - APPLICATION_PORT=8000
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_HOST=database
