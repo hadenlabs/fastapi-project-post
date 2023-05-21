@@ -1,5 +1,11 @@
 # Testing
 
+## Build compose test
+
+```bash
+task compose:test:build
+```
+
 ## Running all tests
 
 ```bash
