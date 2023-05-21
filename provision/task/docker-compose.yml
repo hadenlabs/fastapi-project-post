@@ -92,3 +92,18 @@ tasks:
     cmds:
       - >-
         poetry run docker-compose -f {{.PATH_DOCKER_COMPOSE}}/test.yml run --rm --entrypoint "pytest --no-header -v -s" {{.DOCKER_SERVICE_API}}
+
+  test:cmd:
+    desc: command docker compose test.
+    run: once
+    deps:
+      - task: check:docker
+    cmds:
+      - cmd: poetry run docker-compose -f {{.PATH_DOCKER_COMPOSE}}/test.yml {{.PARAMS}} {{.DOCKER_SERVICE_API}} {{.CLI_ARGS}}
+
+  test:build:
+    desc: build docker compose for test.
+    run: once
+    cmds:
+      - task: test:cmd
+        vars: { PARAMS: build --no-cache }

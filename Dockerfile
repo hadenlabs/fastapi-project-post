@@ -2,68 +2,81 @@
 # Dockerfile for fastapi-project-post
 #
 
-FROM python:3.9.2 as base
+FROM python:3.11.2-slim as base
 
 # Setup env
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONFAULTHANDLER 1
+ENV USERNAME appuser
+ENV PORT=8000
+ENV STAGE=production
 
 WORKDIR /usr/src/app
 
 ENV BASE_DEPS \
-    software-properties-common \
+    git \
     vim \
     bash \
     curl \
     tzdata \
     ca-certificates
 
-ENV PACKAGE_DEPS \
-    build-essential \
-    libpq-dev \
-    git \
+ENV BUILD_DEPS \
     curl \
-    gettext
+    libpq-dev \
+    build-essential \
+    software-properties-common \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    gettext \
+    openssl \
+    autoconf \
+    pkgconf \
+    python3-cffi \
+    libssl-dev \
+    libtool
+
+ENV PACKAGES_PIP \
+    poetry
+
+
+FROM base as requirements-stage
+
+WORKDIR /build
+
+COPY ./pyproject.toml ./poetry.lock* /build/
 
 RUN apt-get update -y \
-    && apt-get install -y --no-install-recommends ${BASE_DEPS} ${PACKAGE_DEPS} \
+    && apt-get install -y --no-install-recommends ${BUILD_DEPS} \
     && pip install --no-cache-dir --upgrade pip \
-    && mkdir -p logs \
+    && pip install --no-cache-dir ${PACKAGES_PIP} \
+    && poetry config virtualenvs.create false \
+    && poetry export --with dev --with test --format requirements.txt --output requirements.txt --without-hashes \
     && apt-get clean \
     && apt-get purge -y \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
-FROM base AS python-deps
-
-ENV PIPENV_VENV_IN_PROJECT=${PIPENV_VENV_IN_PROJECT:-1} \
-    WORKON_HOME=${WORKON_HOME:-/project/.venv}
-
-WORKDIR /project
-
-ENV MODULES_PYTHON \
-    poetry
-
-# Install python dependencies in /project/.venv
-COPY Pipfile .
-
-RUN pip install --no-cache --no-cache-dir ${MODULES_PYTHON} \
-    && poetry install --dev --skip-lock
-
-
-FROM base AS runtime
-
-ENV PATH="/project/.venv/bin:${PATH}"
+FROM base as runtime
 
 WORKDIR /usr/src/app
 
+# Create a non-root user
+
+COPY --from=requirements-stage /build/requirements.txt requirements.txt
+
 COPY . .
 
-COPY --from=python-deps /project/.venv /project/.venv
+RUN apt-get update -y \
+  && apt-get install -y --no-install-recommends ${BASE_DEPS} ${BUILD_DEPS} \
+  && pip install --no-cache-dir -r requirements.txt \
+  && apt-get clean \
+  && apt-get purge -y \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Port to expose
-EXPOSE 3000
+EXPOSE 8000
 
 CMD ["python", "main.py"]
