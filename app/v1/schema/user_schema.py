@@ -8,9 +8,7 @@ from .base_schema import CommonBase
 
 class UserBase(CommonBase):
     email: EmailStr = Field(..., example="myemail@infosisglobal.com")
-    username: str = Field(
-        ..., min_length=3, max_length=100, example="MyTypicalUsername"
-    )
+    username: str = Field(..., min_length=3, max_length=100, example="MyTypicalUsername")
 
 
 class UserCreate(UserBase):
